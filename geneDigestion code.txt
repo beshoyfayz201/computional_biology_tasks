@@ -1,0 +1,14 @@
+from urllib.request import urlretrieve
+from pyopenms import *
+
+fh = open("D:/last/compti/slides/tasks/gen.txt")
+
+
+dig = ProteaseDigestion()
+dig.setEnzyme('Lys-C')
+bsa = "".join([l.strip() for l in fh.readlines()[1:]])
+bsa = AASequence.fromString(bsa)
+result = []
+dig.digest(bsa, result)
+print(result[4].toString())
+len(result) 

@@ -1,0 +1,40 @@
+from pyopenms import *
+seq = AASequence.fromString("VAKA")
+seq_formula = seq.getFormula()
+vakaTotalMZ=0
+coarse_isotopes = seq_formula.getIsotopeDistribution( CoarseIsotopePatternGenerator(6) )
+for iso in coarse_isotopes.getContainer():
+    print ("Isotope", iso.getMZ(),)
+    vakaTotalMZ+=iso.getMZ()
+print(vakaTotalMZ)
+########################################################################################
+v = ResidueDB().getResidue("V")
+a = ResidueDB().getResidue("A")
+k = ResidueDB().getResidue("K")
+l=[v,a,k,a]
+subVakaMZ=0;
+for i in l:
+    vf=EmpiricalFormula(v.getFormula().toString()).getIsotopeDistribution(CoarseIsotopePatternGenerator(5))
+    for iso in vf.getContainer():
+        subVakaMZ+=iso.getMZ()
+print(subVakaMZ)
+###############another Solution#############
+from pyopenms import *
+seq = AASequence.fromString("VAKA") # create AASequence object from string representation
+
+# print string representation of sequences
+print("Sequence:", seq)
+
+# some mass calculations
+mfull = seq.getMonoWeight() # weight of M
+mprecursor = seq.getMonoWeight(Residue.ResidueType.Full, 2) # weight of M+2H
+
+# we can calculate mass-over-charge manually
+mz = seq.getMonoWeight(Residue.ResidueType.Full, 2) / 2.0 # m/z of [M+2H]2+
+# or simply by:
+mz = seq.getMZ(2) # same as above
+
+print()
+print("Monoisotopic mass of peptide [M] is", mfull)
+print("Monoisotopic mass of peptide precursor [M+2H]2+ is", mprecursor)
+print("Monoisotopic m/z of [M+2H]2+ is", mz)
