@@ -1,14 +1,38 @@
-from urllib.request import urlretrieve
+import matplotlib.pyplot as plt
+import numpy as np
+
 from pyopenms import *
-
-fh = open("D:/last/compti/slides/tasks/gen.txt")
-
+#_________Modify the file handler location
+fh = open("D:/last/compti/slides/tasks/gene.txt")
 
 dig = ProteaseDigestion()
-dig.setEnzyme('Lys-C')
 bsa = "".join([l.strip() for l in fh.readlines()[1:]])
 bsa = AASequence.fromString(bsa)
 result = []
 dig.digest(bsa, result)
-print(result[4].toString())
-len(result) 
+len(result)
+print(result[0])
+#########################
+spec = MSSpectrum()
+p.setValue("add_b_ions", "true")
+p.setValue("add_a_ions", "true")
+p.setValue("add_losses", "true")
+p.setValue("add_metainfo", "true")
+tsg.setParameters(p)
+for peptide in result:
+    
+    tsg.getSpectrum(spec, peptide, 1, 2)
+
+# Iterate over annotated ions and their masses
+print("Spectrum 2 of", peptide, "has", spec2.size(), "peaks.")
+for ion, peak in zip(spec2.getStringDataArrays()[0], spec2):
+    print(
+        ion.decode(), "is generated at m/z", peak.getMZ()
+    )
+
+exp = MSExperiment()
+exp.addSpectrum(spec)
+plt.bar(spec.get_peaks()[0], spec.get_peaks()[1], snap=False) # snap ensures that all bars are rendered
+plt.xlabel("m/z")
+plt.ylabel("intensity")
+MzMLFile().store("homosapiensresult.mzML", exp)
